@@ -15,6 +15,7 @@ import useFetchEffect from '../hooks/useFetchEffect';
 import { buildImageUrl, imageFallback } from '../connectors/tmdb';
 import { WATCHLIST_URL } from '../connectors/api';
 import { STATUS } from '../utils';
+import RatingCircle from '../components/RatingCircle';
 
 export default function Watchlist() {
   const { status, data: movies, error } = useFetchEffect(`${WATCHLIST_URL}`);
@@ -24,7 +25,7 @@ export default function Watchlist() {
   }
   if (status === STATUS.PENDING) {
     return (
-      <Center minH="50vh">
+      <Center minH='50vh'>
         <CircularProgress isIndeterminate />
       </Center>
     );
@@ -38,17 +39,31 @@ export default function Watchlist() {
   }
 
   return (
-    <Container p={3} maxW="80em">
-      <SimpleGrid minChildWidth={150} spacing={3}>
-        {movies.map(movie => (
-          <Box as={Link} to={`/movies/${movie.id}`} key={movie.id} pos="relative" noOfLines={2}>
-            <Badge variant="solid" colorScheme="teal" pos="absolute" top={1} right={1}>
-              {movie.vote_average}
-            </Badge>
+    <Container p={3} maxW='80em'>
+      <SimpleGrid
+        minChildWidth={100}
+        spacing={3}
+        gridTemplateColumns='repeat(4, minmax(100px, 1fr))'
+      >
+        {movies.map((movie) => (
+          <Box
+            as={Link}
+            to={`/movies/${movie.id}`}
+            key={movie.id}
+            pos='relative'
+            noOfLines={2}
+            width='fit-content'
+          >
+            <RatingCircle
+              score={movie.vote_average}
+              isLabelHidden
+              css={{ margin: 0, position: 'absolute', right: 0 }}
+              scale='scale(0.8)'
+            />
             <Tooltip label={movie.title}>
               <Image
                 src={buildImageUrl(movie.poster_path, 'w300')}
-                alt="Poster"
+                alt='Poster'
                 fallbackSrc={imageFallback}
               />
             </Tooltip>
