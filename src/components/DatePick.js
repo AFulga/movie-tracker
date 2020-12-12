@@ -14,10 +14,11 @@ const {
 const { default: DateFnsUtils } = require('@date-io/date-fns');
 const { MuiPickersUtilsProvider, DatePicker } = require('@material-ui/pickers');
 
-const DatePick = ({ movieId, whatched_date, release_date }) => {
+const DatePick = ({ movieId, whatched_date, release_date, reRender }) => {
   const { movie, updateMovie } = useMovie(movieId);
 
   const [showPicker, setShowPicker] = useState(false);
+  const [watchDate, setWatchDate] = useState(false);
 
   const handleDateChange = (dt) => {
     updateMovie(
@@ -27,6 +28,7 @@ const DatePick = ({ movieId, whatched_date, release_date }) => {
       },
       () => {
         setShowPicker((prev) => !prev);
+        reRender(movieId, dt);
       }
     );
   };

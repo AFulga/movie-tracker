@@ -19,11 +19,10 @@ export default function WatchlistButton({ movie, update, css = {} }) {
       setStatus
     );
   };
-  console.log('status', status);
 
   const isListed = movie.watchlist === WATCHLIST.LISTED; // we don't care if watchlist is REMOVED or undefined, both means it's not listed
   const label = isListed ? 'Remove from watchlist' : 'Add to watchlist';
-  console.log('isListed', isListed);
+
   return (
     <Box css={css}>
       <Tooltip label={label}>

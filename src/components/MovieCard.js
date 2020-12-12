@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Box, Center, Text } from '@chakra-ui/react';
+import { Box, Center, Image, Text } from '@chakra-ui/react';
 import { releaseDateFormat2, STATUS } from '../utils';
 import RatingCircle from './RatingCircle';
 import DatePick from './DatePick';
@@ -8,7 +8,7 @@ import { buildImageUrl } from '../connectors/tmdb';
 import WatchlistButton from './WatchlistButton';
 import { CircularProgress, Container } from '@material-ui/core';
 
-const MovieCard = ({ movie, imageSrc, showDatePicker = true }) => {
+const MovieCard = ({ movie, imageSrc, showDatePicker = true, reRender }) => {
   // const MovieCard = ({ movieId, showDatePicker = true }) => {
   //   const { movie, status, error, updateStatus, updateMovie } = useMovie(movieId);
   //   const imageSrc = buildImageUrl(movie?.poster_path, 'w300');
@@ -83,6 +83,7 @@ const MovieCard = ({ movie, imageSrc, showDatePicker = true }) => {
               }}
             />
           </Box>
+          {/* <Image src={imageSrc} /> */}
         </Box>
       </Box>
       <Box mt='20px' w='100%'>
@@ -111,6 +112,7 @@ const MovieCard = ({ movie, imageSrc, showDatePicker = true }) => {
               movieId={movie.movieId}
               whatched_date={movie.whatched_date}
               release_date={movie.release_date}
+              reRender={reRender}
             />
           </Box>
         )}

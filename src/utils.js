@@ -53,6 +53,15 @@ export const releaseDateFormat = (date) => {
   return `${day}/${month}/${year}`;
 };
 
+export const getAge = (date) => {
+  if (!date) {
+    return;
+  }
+  var ageDifMs = Date.now() - date.getTime();
+  var ageDate = new Date(ageDifMs); // miliseconds from epoch
+  return Math.abs(ageDate.getUTCFullYear() - 1970);
+};
+
 export const releaseDateFormat2 = (date) => {
   const monthNames = [
     'January',
@@ -91,3 +100,8 @@ export const shuffle = (arr) => {
 
 export const sleep = (duration = 500) =>
   new Promise((resolve) => setTimeout(resolve, duration));
+
+export const validateEmail = (email) => {
+  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(String(email).toLowerCase());
+};

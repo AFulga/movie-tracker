@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Text,
   CircularProgress,
@@ -30,9 +30,34 @@ const sortValues = [
   },
 ];
 
+const sortFn = (m1, m2, { key, isDate }) => {
+  const val1 = isDate ? new Date(m1[key]) : m1[key].toLowerCase();
+  const val2 = isDate ? new Date(m2[key]) : m2[key].toLowerCase();
+
+  if (val1 < val2) {
+    return -1;
+  }
+  if (val1 > val2) {
+    return 1;
+  }
+  return 0;
+};
+
 export default function History() {
-  const { status, data: movies, error } = useFetchEffect(`${HISTORY_URL}`);
-  const [sortVal, setSortVal] = useState(sortValues[1]);
+  const { status, data: movies, error } = useFetchEffect(HISTORY_URL);
+  const [sortVal, setSortVal] = useState(sortValues[0]);
+  const [sortedMovies, setSortedMovies] = useState([]);
+
+  useEffect(() => {
+    if (movies && sortedMovies.length === 0) {
+      setSortedMovies([...movies].sort((m1, m2) => sortFn(m1, m2, sortVal)));
+    }
+    if (sortedMovies.length && sortVal) {
+      setSortedMovies((prev) =>
+        [...prev].sort((m1, m2) => sortFn(m1, m2, sortVal))
+      );
+    }
+  }, [movies, sortVal]);
 
   if (status === STATUS.IDLE) {
     return null;
@@ -52,20 +77,21 @@ export default function History() {
     );
   }
 
-  const sortFn = (m1, m2, { key, isDate }) => {
-    const val1 = isDate ? new Date(m1[key]) : m1[key].toLowerCase();
-    const val2 = isDate ? new Date(m2[key]) : m2[key].toLowerCase();
-
-    if (val1 < val2) {
-      return -1;
-    }
-    if (val1 > val2) {
-      return 1;
-    }
-    return 0;
+  // let sortedMovies = movies.sort((m1, m2) => sortFn(m1, m2, sortVal));
+  const handleDateChange = (movieId, newDate) => {
+    setSortedMovies((prev) => {
+      const temp = [...prev].map((movie) => {
+        if (movie.movieId === movieId) {
+          return {
+            ...movie,
+            whatched_date: newDate,
+          };
+        }
+        return movie;
+      });
+      return [...temp].sort((m1, m2) => sortFn(m1, m2, sortVal));
+    });
   };
-
-  let sortedMovies = movies.sort((m1, m2) => sortFn(m1, m2, sortVal));
 
   return (
     <Container p={3} maxW='50em'>
@@ -73,7 +99,9 @@ export default function History() {
         <Text mr='3px'>Sort By:</Text>
         <Select
           w='150px'
-          onChange={(event) => setSortVal(sortValues[event.target.value])}
+          onChange={(event) => {
+            setSortVal(sortValues[event.target.value]);
+          }}
           defaultValue={0}
         >
           <option value='0'>Release date</option>
@@ -90,7 +118,14 @@ export default function History() {
         {sortedMovies.map((movie) => {
           const src = buildImageUrl(movie.poster_path, 'w300');
 
-          return <MovieCard key={movie.movieId} movie={movie} imageSrc={src} />;
+          return (
+            <MovieCard
+              key={movie.movieId}
+              movie={movie}
+              imageSrc={src}
+              reRender={handleDateChange}
+            />
+          );
         })}
       </SimpleGrid>
     </Container>
