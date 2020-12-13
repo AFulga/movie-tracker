@@ -12,7 +12,7 @@ import { Box } from '@material-ui/core';
 import { useContext, useEffect, useState } from 'react';
 import { NavLink as RouterLink } from 'react-router-dom';
 import { BeatLoader } from 'react-spinners';
-import { LOGIN_URL, USER_URL } from '../connectors/api';
+import { LOGIN_URL } from '../connectors/api';
 import { UserContext } from '../context/UserContext';
 import useFetchCallback from '../hooks/useFetchCallback';
 import { STATUS } from '../utils';
@@ -27,8 +27,8 @@ const Login = () => {
     pass,
   });
   useEffect(() => {
-    if (data?.user) {
-      setUser(data.user);
+    if (data) {
+      setUser(data);
     }
   }, [data]);
 

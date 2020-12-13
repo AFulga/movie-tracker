@@ -13,7 +13,7 @@ import { Box } from '@material-ui/core';
 import { useContext, useEffect, useState } from 'react';
 // import { Link } from 'react-router-dom';
 import { BeatLoader } from 'react-spinners';
-import { LOGIN_URL, SIGNUP_URL, USER_URL } from '../connectors/api';
+import { SIGNUP_URL } from '../connectors/api';
 import useFetchCallback from '../hooks/useFetchCallback';
 import { STATUS, validateEmail } from '../utils';
 import { UserContext } from '../context/UserContext';
@@ -21,7 +21,7 @@ import { UserContext } from '../context/UserContext';
 const Signup = () => {
   const { setUser } = useContext(UserContext);
   const [firstName, setFirstName] = useState('');
-  const [surename, setSurename] = useState('');
+  const [surname, setSurname] = useState('');
   const [email, setEmail] = useState('');
   const [pass, setPass] = useState('');
   const [message, setMessage] = useState('');
@@ -30,24 +30,24 @@ const Signup = () => {
     email,
     pass,
     firstName,
-    surename,
+    surname,
   });
 
   useEffect(() => {
     if (data?.message) {
       setMessage(data.message);
     }
-    if (data?.user) {
-      setUser(data.user);
+    if (data?.value) {
+      setUser(data.value);
     }
   }, [data]);
 
   const submitData = () => {
     setMessage('');
-    if (validateEmail(email) && firstName && surename && pass) {
+    if (validateEmail(email) && firstName && surname && pass) {
       callback();
     } else {
-      if (!(email && firstName && surename && pass)) {
+      if (!(email && firstName && surname && pass)) {
         setMessage('All fields are required');
       } else {
         if (!validateEmail(email)) {
@@ -57,7 +57,7 @@ const Signup = () => {
     }
   };
 
-  console.log('user', data?.user);
+  console.log('user', data);
 
   return (
     <Container p={3} maxW='30em' mt='10px'>
@@ -80,12 +80,12 @@ const Signup = () => {
           />
         </InputGroup>
         <InputGroup>
-          <InputLeftAddon children='Surename' width='96px' />
+          <InputLeftAddon children='Surname' width='96px' />
           <Input
             isDisabled={status === STATUS.PENDING}
             variant='outline'
-            value={surename}
-            onChange={(event) => setSurename(event.target.value)}
+            value={surname}
+            onChange={(event) => setSurname(event.target.value)}
           />
         </InputGroup>
         <InputGroup>

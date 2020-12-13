@@ -12,7 +12,7 @@ const useFetchCallback = (url, method = 'GET', body = undefined) => {
 
   const callback = React.useCallback(() => {
     setState({ status: STATUS.PENDING });
-
+    console.log('body', body);
     fetch(url, generateConfig(method, body))
       .then((data) => {
         if (data.status >= 300) {

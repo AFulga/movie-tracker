@@ -25,7 +25,6 @@ import HistoryButton from '../components/HistoryButton';
 export default function Movie() {
   const { movieId } = useParams();
   const history = useHistory();
-  const [isHistoryActive, setHistoryActive] = React.useState(false); // temp state, for UI only, should be removed when implemented properly
 
   const { movie, status, error, updateStatus, updateMovie } = useMovie(movieId);
 
@@ -49,6 +48,8 @@ export default function Movie() {
     );
   }
   const isDisabled = new Date() <= new Date(movie.release_date);
+
+  console.log('movie', movie);
 
   return (
     <Container p={3} maxW='70vw'>

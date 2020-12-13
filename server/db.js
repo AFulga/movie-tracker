@@ -21,5 +21,7 @@ client
   )
   .then(() => {
     const movies = client.db(CONFIG.DB).collection('movies');
+    const users = client.db(CONFIG.DB).collection('users');
     module.exports.movies = movies;
+    module.exports.users = users;
   });

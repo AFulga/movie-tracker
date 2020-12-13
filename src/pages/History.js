@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   Text,
   CircularProgress,
@@ -7,6 +7,8 @@ import {
   Box,
   SimpleGrid,
   Select,
+  InputGroup,
+  InputLeftAddon,
 } from '@chakra-ui/react';
 import useFetchEffect from '../hooks/useFetchEffect';
 import { buildImageUrl } from '../connectors/tmdb';
@@ -14,6 +16,7 @@ import { HISTORY_URL } from '../connectors/api';
 import { STATUS } from '../utils';
 
 import MovieCard from '../components/MovieCard';
+import { UserContext } from '../context/UserContext';
 
 const sortValues = [
   {
@@ -44,7 +47,10 @@ const sortFn = (m1, m2, { key, isDate }) => {
 };
 
 export default function History() {
-  const { status, data: movies, error } = useFetchEffect(HISTORY_URL);
+  const { user } = useContext(UserContext);
+  const { status, data: movies, error } = useFetchEffect(
+    `${HISTORY_URL}/${user.uid}`
+  );
   const [sortVal, setSortVal] = useState(sortValues[0]);
   const [sortedMovies, setSortedMovies] = useState([]);
 
@@ -95,21 +101,22 @@ export default function History() {
 
   return (
     <Container p={3} maxW='50em'>
-      <Box mb='10px' d='flex' justifyContent='center' alignItems='center'>
-        <Text mr='3px'>Sort By:</Text>
-        <Select
-          w='150px'
-          onChange={(event) => {
-            setSortVal(sortValues[event.target.value]);
-          }}
-          defaultValue={0}
-        >
-          <option value='0'>Release date</option>
-          <option value='1'>Name</option>
-          <option value='2'>View Date</option>
-        </Select>
+      <Box mb='20px'>
+        <InputGroup d='flex' justifyContent='center'>
+          <InputLeftAddon children='Sort By:' />
+          <Select
+            w='150px'
+            onChange={(event) => {
+              setSortVal(sortValues[event.target.value]);
+            }}
+            defaultValue={0}
+          >
+            <option value='0'>Release date</option>
+            <option value='1'>Name</option>
+            <option value='2'>View Date</option>
+          </Select>
+        </InputGroup>
       </Box>
-
       <SimpleGrid
         minChildWidth={150}
         spacing={3}

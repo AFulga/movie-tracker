@@ -1,16 +1,19 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { IconButton, Tooltip } from '@chakra-ui/react';
 import { StarIcon } from '@chakra-ui/icons';
 import { STATUS } from '../utils';
 import { WATCHLIST } from '../connectors/api';
 import { Box } from '@material-ui/core';
+import { UserContext } from '../context/UserContext';
 
 export default function WatchlistButton({ movie, update, css = {} }) {
+  const { user } = useContext(UserContext);
   const [status, setStatus] = useState(STATUS.IDLE);
   const toggleWatchlist = () => {
     update(
       {
         ...movie,
+        uid: user.uid,
         watchlist:
           movie.watchlist === WATCHLIST.LISTED
             ? WATCHLIST.REMOVED

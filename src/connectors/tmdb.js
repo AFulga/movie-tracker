@@ -10,8 +10,11 @@ export const buildMovieReleaseUrl = (movieId) =>
   buildUrl(`movie/${movieId}/release_dates`);
 export const buildMovieCreditsUrl = (movieId) =>
   buildUrl(`movie/${movieId}/credits`);
-export const buildSearchMovieUrl = (terms) =>
-  buildUrl('search/movie', `query=${terms}`);
+export const buildSearchMovieUrl = (terms) => {
+  console.log('terms2', terms);
+  return buildUrl('search/movie', `query=${terms}`);
+};
+
 export const buildImageUrl = (path, size = 'original') =>
   `https://image.tmdb.org/t/p/${size}${path}`;
 export const imageFallback =

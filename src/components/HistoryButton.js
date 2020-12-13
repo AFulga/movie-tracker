@@ -1,15 +1,18 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { IconButton, Tooltip } from '@chakra-ui/react';
 import { AddIcon, CheckIcon } from '@chakra-ui/icons';
 import { STATUS } from '../utils';
 import { HISTORY } from '../connectors/api';
+import { UserContext } from '../context/UserContext';
 
 export default function HistoryButton({ movie, update, isDisabled = false }) {
+  const { user } = useContext(UserContext);
   const [status, setStatus] = useState(STATUS.IDLE);
   const toggleHistory = () => {
     update(
       {
         ...movie,
+        uid: user.uid,
         history:
           movie.history === HISTORY.WATCHED ? HISTORY.REMOVED : HISTORY.WATCHED,
         whatched_date: movie.history === HISTORY.WATCHED ? '' : new Date(),

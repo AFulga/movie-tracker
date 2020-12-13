@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
-import { NavLink as RouterLink } from 'react-router-dom';
+import React, { useContext, useState } from 'react';
+import { NavLink as RouterLink, useHistory } from 'react-router-dom';
 
 import { Link, Box, Heading, Flex, Button, Container } from '@chakra-ui/react';
-import { HamburgerIcon } from '@chakra-ui/icons';
+import { ArrowForwardIcon, HamburgerIcon } from '@chakra-ui/icons';
 import { AccountCircle } from '@material-ui/icons';
 import UserIcon from './UserIcon';
+import { UserContext } from '../context/UserContext';
+import useFetchCallback from '../hooks/useFetchCallback';
+import { LOGOUT_URL } from '../connectors/api';
 
 const MenuItem = ({ to, children }) => (
   <Link as={RouterLink} to={to} mt={{ base: 4, sm: 0 }} mr={6} display='block'>
@@ -13,10 +16,20 @@ const MenuItem = ({ to, children }) => (
 );
 
 export default function Header() {
+  // const history = useHistory();
+  const { setUser } = useContext(UserContext);
   const [show, setShow] = React.useState(false);
-  const [iconColor, setIconColor] = useState('inherit');
+  const [callback, state] = useFetchCallback(LOGOUT_URL);
   const handleToggle = () => setShow((s) => !s);
 
+  const handleLogOut = () => {
+    callback();
+    setUser(null);
+    // history.push('/');
+    // setUser(null)
+  };
+  // console.log('history', history);
+  console.log('logout state', state);
   return (
     <Box bg='teal.500'>
       <Container p={0} maxW='80em'>
@@ -50,12 +63,6 @@ export default function Header() {
             <MenuItem to='/watchlist'>Watchlist</MenuItem>
             <MenuItem to='/history'>History</MenuItem>
             <MenuItem to='/profile'>
-              {/* <AccountCircle
-                style={{ fontSize: 40 }}
-                onMouseEnter={() => setIconColor('action')}
-                onMouseLeave={() => setIconColor('inherit')}
-                color={iconColor}
-              /> */}
               <UserIcon />
             </MenuItem>
           </Box>
@@ -71,6 +78,20 @@ export default function Header() {
               border='1px'
             >
               What to watch
+            </Button>
+
+            <Button
+              rightIcon={<ArrowForwardIcon />}
+              as={RouterLink}
+              to='/'
+              color='yellow.100'
+              border='1px'
+              bg='transparent'
+              size='xs'
+              ml='5px'
+              onClick={() => handleLogOut()}
+            >
+              Log out
             </Button>
           </Box>
         </Flex>

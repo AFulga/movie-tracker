@@ -3,6 +3,7 @@ import React from 'react';
 import { STATUS } from '../utils';
 
 const useFetchEffect = (url, shouldFetch = true) => {
+  console.log('url', url);
   const [state, setState] = React.useState({
     status: STATUS.IDLE,
     data: null,

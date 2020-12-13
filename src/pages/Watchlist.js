@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   Text,
   Image,
@@ -16,9 +16,13 @@ import { buildImageUrl, imageFallback } from '../connectors/tmdb';
 import { WATCHLIST_URL } from '../connectors/api';
 import { STATUS } from '../utils';
 import RatingCircle from '../components/RatingCircle';
+import { UserContext } from '../context/UserContext';
 
 export default function Watchlist() {
-  const { status, data: movies, error } = useFetchEffect(`${WATCHLIST_URL}`);
+  const { user } = useContext(UserContext);
+  const { status, data: movies, error } = useFetchEffect(
+    `${WATCHLIST_URL}/${user.uid}`
+  );
 
   if (status === STATUS.IDLE) {
     return null;

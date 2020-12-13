@@ -4,19 +4,14 @@ import {
   Box,
   Input,
   IconButton,
-  UnorderedList,
-  ListItem,
   Container,
   Link,
   Progress,
   Text,
   VStack,
-  StackDivider,
   Divider,
   Heading,
   Image,
-  useColorMode,
-  Button,
 } from '@chakra-ui/react';
 import { SearchIcon } from '@chakra-ui/icons';
 import useFetchEffect from '../hooks/useFetchEffect';
@@ -37,7 +32,7 @@ export default function Search() {
     event.preventDefault();
     const value = searchRef.current.value;
     if (value !== terms) {
-      history.push(`/search/${value}`);
+      history.push(`/search/${value}/adult`);
     }
   };
 
@@ -45,6 +40,8 @@ export default function Search() {
     buildSearchMovieUrl(terms),
     !!terms
   );
+
+  console.log('terms', terms);
 
   return (
     <Container p={3}>
