@@ -1,0 +1,29 @@
+#rcCv {
+  position: absolute;
+  z-index: 0;
+}
+
+.percent {
+  /* width: 60px; */
+  background: transparent;
+  color: wheat;
+  font-size: 24px;
+  /* height: 60px; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 5;
+  position: relative;
+}
+.percent sup {
+  font-size: 10px;
+  top: -1.1em;
+}
+
+.u-text {
+  /* width: 50px; */
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  margin-left: 5px;
+}

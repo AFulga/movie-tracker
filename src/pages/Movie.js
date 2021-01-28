@@ -16,11 +16,15 @@ import useMovie from '../hooks/useMovie';
 import { buildImageUrl, imageFallback } from '../connectors/tmdb';
 import { getYear, STATUS } from '../utils';
 import WatchlistButton from '../components/WatchlistButton';
+import MovieFacts from '../components/MovieFacts';
+import RatingCircle from '../components/RatingCircle';
+import Overview from '../components/Overviw';
+import MovieCrew from '../components/MovieCrew';
+import HistoryButton from '../components/HistoryButton';
 
 export default function Movie() {
   const { movieId } = useParams();
   const history = useHistory();
-  const [isHistoryActive, setHistoryActive] = React.useState(false); // temp state, for UI only, should be removed when implemented properly
 
   const { movie, status, error, updateStatus, updateMovie } = useMovie(movieId);
 
@@ -29,7 +33,7 @@ export default function Movie() {
   }
   if (status === STATUS.PENDING) {
     return (
-      <Center minH="50vh">
+      <Center minH='50vh'>
         <CircularProgress isIndeterminate />
       </Center>
     );
@@ -43,47 +47,59 @@ export default function Movie() {
       </Container>
     );
   }
+  const isDisabled = new Date() <= new Date(movie.release_date);
+
+  console.log('movie', movie);
 
   return (
-    <Container p={3} maxW="80em">
-      <HStack mb={3} justify="space-between">
+    <Container p={3} maxW='70vw'>
+      <HStack mb={3} justify='space-between'>
         <IconButton
-          aria-label="Back"
+          aria-label='Back'
           icon={<ChevronLeftIcon />}
-          variant="outline"
+          variant='outline'
           fontSize={36}
-          colorScheme="teal"
+          colorScheme='teal'
           onClick={history.goBack}
         />
         <HStack>
-          <WatchlistButton movie={movie} status={updateStatus} update={updateMovie} />
-          <IconButton
-            aria-label={isHistoryActive ? 'Remove from history' : 'Mark as watched'}
-            icon={isHistoryActive ? <CheckIcon /> : <AddIcon />}
-            colorScheme="teal"
-            variant={isHistoryActive ? 'solid' : 'outline'}
-            onClick={() => setHistoryActive(a => !a)}
+          <WatchlistButton
+            movie={movie}
+            // status={updateStatus}
+            update={updateMovie}
+          />
+          <HistoryButton
+            movie={movie}
+            // status={updateStatus}
+            update={updateMovie}
+            isDisabled={isDisabled}
           />
         </HStack>
       </HStack>
-      <HStack spacing={3} align="flex-start">
+      <HStack align='flex-start'>
         <Box>
           <Image
             src={buildImageUrl(movie.poster_path, 'w300')}
-            alt="Poster"
-            w="35vw"
+            alt='Poster'
+            w='35vw'
             maxW={300}
             fallbackSrc={imageFallback}
           />
         </Box>
-        <Box w="100%">
-          <HStack justify="space-between">
-            <Heading as="h2">{movie.title}</Heading>
-            <Text as="span" color="GrayText">
-              {getYear(movie.release_date)}
+        <Box maxW='70vw' paddingLeft={10}>
+          <Heading as='h2'>
+            {movie.title}
+            <Text as='span' marginLeft='5px' fontWeight={400} opacity={0.8}>
+              ({getYear(movie.release_date)})
             </Text>
-          </HStack>
-          <Text>{movie.overview}</Text>
+          </Heading>
+          <MovieFacts movie={movie} />
+          <RatingCircle score={movie.vote_average} />
+          <Text fontStyle='italic' opacity={0.8} mb='5px'>
+            {movie.tagline}
+          </Text>
+          <Overview text={movie.overview} />
+          <MovieCrew data={movie.crew} />
         </Box>
       </HStack>
     </Container>
